@@ -18,4 +18,4 @@
  由于某些社团不会在DLSite页面靠右侧的列表里输入声优名称
  有些作品的"声优"关键字没法被程序爬取到，也就无法替换
  
- ![示例图片](https://i.loli.net/2019/08/28/u7xRac2XpYJzqlW.png)
+ ![示例图片](https://i.loli.net/2019/08/29/KJxOBVktrlfZ6sa.png)
