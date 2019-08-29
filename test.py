@@ -8,9 +8,8 @@ import time
 import re
 import os
 
-
-# 默认命名格式
-template = 'RJ号 [社团] 标题 (声优)'
+# 默认配置
+template = 'RJ号 [社团] 标题 (声优)' # 默认命名格式
 
 RJ_WEBPATH = 'https://www.dlsite.com/maniax/work/=/product_id/'
 RT_WEBPATH = 'https://www.dlsite.com.tw/work/product_id/'
@@ -19,7 +18,7 @@ R_COOKIE = {'adultchecked': '1'}
 # re.compile()返回一个匹配对象
 # ensure path name is exactly RJ###### or RT######
 pattern = re.compile("^R[EJT]\d{6}$")
-#filter to substitute illegal filenanme characters to " "
+# filter to substitute illegal filenanme characters to " "
 filter = re.compile('[\\\/:"*?<>|]+')
 
 
@@ -114,6 +113,7 @@ def nameChange():
     if path == "":
         messagebox.showinfo(title="错误", message="请选择路径!" + "\n")
     else:
+        cbtn.config(state=tk.DISABLED)
         btn.config(state=tk.DISABLED)
         btn['text'] = "等待完成"
         text.insert(tk.END, "选择路径: " + path + "\n")
@@ -142,6 +142,10 @@ def nameChange():
                         r_status, title, circle, cvList = match_rt(r_code)
                     # 如果顺利爬取网页信息
                     if r_status == 200 and title and circle:
+                        if var1.get():                       
+                            # 删除title中的【.*?】
+                            title = re.sub(u"\\【.*?】", "", title)
+
                         new_name = template.replace("RJ号", r_code)
                         new_name = new_name.replace("标题", title)
                         new_name = new_name.replace("社团", circle)
@@ -151,7 +155,10 @@ def nameChange():
                             for name in cvList: 
                                 cv += " " + name
                             new_name = new_name.replace("声优", cv[1:])
-                                        
+                        #else:
+                            #new_name = new_name.replace("(声优)", "")
+                                      
+                                                                 
                         # 将Windows文件名中的非法字符替换   
                         new_name = re.sub(filter, " ", new_name)  # re.sub(pattern, repl, string)
                         # 尝试重命名
@@ -175,6 +182,7 @@ def nameChange():
         text.insert(tk.END, "*******完成!*******\n\n\n\n")
         tk.messagebox.showinfo(title="提示", message="完成!")
         
+        cbtn.config(state=tk.NORMAL)
         btn.config(state=tk.NORMAL)
         btn['text'] = "选择路径"
     
@@ -191,10 +199,9 @@ def thread_it(func, *args):
 
 
 
-
 root = tk.Tk()  # 实例化object，建立窗口root
 root.title('DLsite重命名工具 v1.0')  # 给窗口的可视化起名字
-root.geometry('300x350')  # 设定窗口的大小(长 * 宽)
+root.geometry('300x375')  # 设定窗口的大小(横向 * 纵向)
 
 text = tk.Text(root)
 text.pack()
@@ -212,23 +219,29 @@ try:
             if ("RJ号" in first_line):
                 template = first_line
                 text.insert(tk.END, "**使用自定义命名格式:\n")
-                text.insert(tk.END, "  " + template + "\n\n")
+                text.insert(tk.END, "  " + template.strip() + "\n\n")
             else:
                 text.insert(tk.END, "**配置文件第一行格式错误\n")
                 text.insert(tk.END, "  请修改配置文件\n")
-                text.insert(tk.END, "  否则将使用默认命名格式\n\n")
+                text.insert(tk.END, "  否则将使用默认命名格式:\n")
+                text.insert(tk.END, "  RJ号 [社团] 标题 (声优)\n\n")
         else:
             text.insert(tk.END, "**配置文件第一行为空!\n")
             text.insert(tk.END, "  请修改配置文件\n")
-            text.insert(tk.END, "  否则将使用默认命名格式\n\n")
+            text.insert(tk.END, "  否则将使用默认命名格式:\n")
+            text.insert(tk.END, "  RJ号 [社团] 标题 (声优)\n\n")
                                                  
 except os.error as err:
     text.insert(tk.END, "**配置文件缺失!\n")
     text.insert(tk.END, "**将使用默认命名格式:\n")
     text.insert(tk.END, "  RJ号 [社团] 标题 (声优)\n")
 
+var1 = tk.IntVar()  # 定义var1整型变量用来存放选择行为返回值
+cbtn = tk.Checkbutton(root, text='去除标题中【】之间的内容', variable=var1, onvalue=1, offvalue=0)  # 传值原理类似于radiobutton部件
 
 btn = tk.Button(root, text='选择路径', command=lambda :thread_it(nameChange))
+
 btn.pack()
+cbtn.pack()
 
 root.mainloop()
