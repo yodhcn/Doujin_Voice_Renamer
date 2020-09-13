@@ -38,7 +38,7 @@
 ```
 
 ### 注意：
-1. config.json 文件使用 UTF-8 编码, 请不要使用 Windows 系统自带的记事本进行编辑，推荐使用专业的文本编辑器进行编辑，例如: [Notepad3](https://www.appinn.com/notepad3/), [vscode](https://code.visualstudio.com/)
+1. config.json 文件使用 **UTF-8** 编码, 请不要用 Windows 系统自带的记事本进行编辑，推荐使用专业的**文本编辑器**，例如: [Notepad3](https://www.appinn.com/notepad3/), [Notepad++](https://notepad-plus-plus.org/), [vscode](https://code.visualstudio.com/)
 ![Notepad3](https://i.loli.net/2020/09/14/q2MvzdYAj8OxUfK.png)
 2. 如需在自定义模板包含 "(cv)", 请将其放在模板字符串的末尾
   - 正确的例子: "template": "workno [circle] title (cv)"
