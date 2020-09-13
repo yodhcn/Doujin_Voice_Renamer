@@ -11,6 +11,7 @@ import json
 
 # 默认配置
 template = 'workno [circle] title (cv)'  # 默认命名模板
+replace_rules = []  # 替换规则
 
 RJ_WEBPATH = 'https://www.dlsite.com/maniax/work/=/product_id/'
 RT_WEBPATH = 'https://www.dlsite.com.tw/work/product_id/'
@@ -169,6 +170,12 @@ def nameChange():
                         else:
                             new_name = new_name.replace("(cv)", "")
 
+                        # 自定义替换规则
+                        for rule in replace_rules:
+                            if 'from' in rule and 'to' in rule:
+                                new_name = new_name.replace(
+                                    rule["from"], rule["to"])
+
                         # 将Windows文件名中的非法字符替换
                         # re.sub(pattern, repl, string)
                         new_name = re.sub(filter, " ", new_name)
@@ -227,7 +234,7 @@ text.pack()
 basedir = os.path.abspath(os.path.dirname(__file__))
 try:
     fname = os.path.join(basedir, 'config.json')
-    with open(fname, 'r') as f:
+    with open(fname, 'r', encoding='utf-8') as f:
         config = json.load(f)
         if config["template"]:  # 模板非空
             if ("workno" in config["template"]):
@@ -242,10 +249,13 @@ try:
             text.insert(tk.END, "**使用默认命名模板:\n")
             text.insert(tk.END, "  workno [circle] title (cv)\n\n")
 
+        if config["replace_rules"] and type(config["replace_rules"]) == list and len(config["replace_rules"]):
+            replace_rules = config["replace_rules"]
+
 except os.error as err:
     # 生成配置文件
-    with open(fname, "w") as f:
-        json.dump({'template': ''}, f, sort_keys=True,
+    with open(fname, "w", encoding='utf-8') as f:
+        json.dump({'template': '', "replace_rules": []}, f, ensure_ascii=False, sort_keys=True,
                   indent=4, separators=(',', ': '))
     text.insert(tk.END, "**使用默认命名模板:\n")
     text.insert(tk.END, "  workno [circle] title (cv)\n")
