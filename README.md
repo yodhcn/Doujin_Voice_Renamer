@@ -1,12 +1,22 @@
-# Doujin_Voice_Renamer
+## 配置文件使用说明
+## 示例配置
+```json
+"proxy": "http://127.0.0.1:7890",
+"replace_rules": [],
+"template": "[circle] title (workno)"
+```
 
-### 使用说明:
+## proxy
+**代理**
 
-**关键字**："circle", "workno", "title" 和 "cv", 模板中的这四个关键字将会被程序替换
+例如："template": "http://127.0.0.1:7890"
+
+## template
+**自定义模板**
+
+"circle", "workno", "title" 和 "cv", 模板中的这四个关键字将会被程序替换
 
 **默认模板**: "template": "workno [circle] title (cv)"
-
-**自定义模板**: 请修改 "config.json" 中的 "template"
 
 例如："template": "[circle] title (workno)"
 
@@ -14,8 +24,10 @@
 
 重命名后：[Hypnotic_Yanh] 哀しみのイき人形《催眠音声・男女版同梱》 (RJ149268)
 
-**自定义替换规则**: 请修改 "config.json" 中的 "replace_rules", 例如
+## replace_rules
+**自定义替换规则**
 
+例如，替换标题中的标点符号：
 ```json
 "replace_rules": [
     {
